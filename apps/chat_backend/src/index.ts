@@ -1,5 +1,5 @@
 import { WebSocket, WebSocketServer } from "ws";
-import express from "express";
+import express, { RequestHandler } from "express";
 import { connectDb } from "./db";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -82,7 +82,7 @@ wss.on("connection", async (socket, req) => {
 
 app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser() as unknown as RequestHandler);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/room", authenticateUser, roomRouter);
