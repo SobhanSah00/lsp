@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { apiGroups } from "../../learnsphere_frontend/src/app/data/apis";
 
-const baseUrl = "http://localhost:3001"
+const baseUrl = "https://lsp-alpha.vercel.app"
+const baseLocalUrl = "https://localhost:3001"
 
 export default function LandingPage() {
   const [stats, setStats] = useState({ totalApis: 0, totalGroups: 0, totalMethods: new Set() });
