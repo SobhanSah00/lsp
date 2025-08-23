@@ -14,49 +14,60 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "LearnSphere API Docs",
+  title: "API Sphere Documentation",
+  description: "Comprehensive API documentation platform",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
       >
-        <div className="flex h-screen">
-          {/* Fixed Sidebar */}
-          <div className="fixed top-0 left-0 h-full w-64 z-50">
+        <div className="flex h-screen overflow-hidden">
+          <div className="fixed top-0 left-0 h-full w-80 z-50">
             <Sidebar />
           </div>
           
-          {/* Main content with left margin to match sidebar width */}
-          <main className="ml-64 flex-1 overflow-y-auto p-8 bg-gray-100">
+          <main className="ml-80 flex-1 overflow-y-auto bg-black">
             {children}
           </main>
         </div>
         
-        {/* Toast notifications - positioned in bottom right */}
         <Toaster 
           position="bottom-right"
           toastOptions={{
             duration: 3000,
             style: {
-              background: 'var(--toast-bg, #333)',
-              color: 'var(--toast-color, #fff)',
-              boxShadow: '0 3px 10px rgba(0, 0, 0, 0.15)',
+              background: '#1f2937',
+              color: '#f9fafb',
+              border: '1px solid #374151',
+              borderRadius: '12px',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15)',
             },
             success: {
               style: {
-                border: '1px solid var(--toast-success-border, #65a30d)',
+                border: '1px solid #059669',
+                background: '#064e3b',
+              },
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#064e3b',
               },
             },
             error: {
               style: {
-                border: '1px solid var(--toast-error-border, #dc2626)',
+                border: '1px solid #dc2626',
+                background: '#7f1d1d',
+              },
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#7f1d1d',
               },
             },
           }}
         />
+
       </body>
     </html>
   );

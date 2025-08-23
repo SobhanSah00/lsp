@@ -677,7 +677,7 @@ export const apiGroups = [
     ]
   },
   {
-    title: 'YouTube',
+    title: 'Social_Media_application',
     apis: [
       {
         name: "register user",
