@@ -849,7 +849,7 @@ export const apiGroups = [
         name: "register user",
         method: "POST",
         description: "Registers a new user on the platform by collecting essential details like fullname, email, and password, username, . Ensures data validation and securely stores user credentials.",
-        image: "/register_user.png",
+        image: "/social_media/register_user.png",
         endpoint: "https://learnsphere-ln9j.onrender.com/api/v1/users/register",
         input: `{
                   "fullName": "test",
