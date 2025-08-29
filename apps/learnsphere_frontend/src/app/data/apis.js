@@ -6,7 +6,7 @@ export const apiGroups = [
         name: "create todo",
         method: "POST",
         description: "create a todo adding the title .",
-        image: "/createTodo.png",
+        image: "/Todo/createTodo.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/createTodo",
         input: `{
     "title" : "test Todo 13",
@@ -68,7 +68,7 @@ export const apiGroups = [
         name: "get all todo",
         method: "GET",
         description: "A request to get all todos which has been created .",
-        image: "/getTodo.png",
+        image: "/Todo/getTodo.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getAllTodo",
         input: `{
         THIS IS A GET REQUEST SO NO NEED TO BE ANY INPUT
@@ -143,7 +143,7 @@ export const apiGroups = [
         name: "update Todo ",
         method: "PATCH",
         description: "update a todo adding the title .",
-        image: "/updateTodo.png",
+        image: "/Todo/updateTodo.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/updateTodo/{SPECIFIC_CREATED_TODO_ID}",
         input: `{
     "title" : "test Todo 13",
@@ -205,7 +205,7 @@ export const apiGroups = [
         name: "delete Todo ",
         method: "DELETE",
         description: "delete the Todo title.IMPORTANT , this is only delete the completed todo, this not going to be deleted the incomplete todos.",
-        image: "/deleteTodo.png",
+        image: "/Todo/deleteTodo.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/deleteTodo/{SPECIFIC_CREATED_TODO_ID}",
         input: `NOT REQUIRED`,
         output: `{
@@ -251,7 +251,7 @@ export const apiGroups = [
         name: "markAsComplete Todo ",
         method: "PATCH",
         description: "delete the Todo title",
-        image: "/markAsComplete.png",
+        image: "/Todo/markAsComplete.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/markAsComplete/{SPECIFIC_CREATED_TODO_ID}",
         input: `NOT REQUIRED`,
         output: `{
@@ -309,7 +309,7 @@ export const apiGroups = [
         name: "getTodoSomeMethods",
         method: "GET",
         description: "GET the todo by some methods like or priority and tags .",
-        image: "/getTodoSomeMethods.png",
+        image: "/Todo/getTodoSomeMethods.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoSomeMethods?{SPECIFIC_QUERY}",
         input: `{
         "priority" : 5,
@@ -398,7 +398,7 @@ export const apiGroups = [
         name: "getTodoById",
         method: "GET",
         description: "GET the todo by the id",
-        image: "/getTodoById.png",
+        image: "/Todo/getTodoById.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoById/{SPECIFIC_CREATED_TODO_ID}",
         input: `NOT REQUIRED`,
         output: `{
@@ -456,7 +456,7 @@ export const apiGroups = [
         name: "deleteAllTodo",
         method: "DELETE",
         description: "DELETE the all todo . IMPORTANT , this is only delete the completed todo, this not going to be deleted the incomplete todos.",
-        image: "/deleteAllTodo.png",
+        image: "/Todo/deleteAllTodo.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/deleteAllTodo",
         input: `NOT REQUIRED`,
         output: `{
@@ -502,7 +502,7 @@ export const apiGroups = [
         name: "getTodoByDueDates",
         method: "GET",
         description: "GET the all todo stats",
-        image: "/getTodoByDueDates.png",
+        image: "/Todo/getTodoByDueDates.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoByDueDates/?query={SPECIFIC DATE}",
         input: `{
         "after" : 2025-05-01
@@ -590,7 +590,7 @@ export const apiGroups = [
         name: "TODO STATS",
         method: "GET",
         description: "GET the all todos, analayze the data , when this completed, after duedate or not and mayny thing...",
-        image: "/todoStats.png",
+        image: "/Todo/todoStats.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/todoStats",
         input: `{
         NOT REQUIRED
@@ -671,6 +671,172 @@ export const apiGroups = [
           }
           
           response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
+          print(response.json())`
+        }
+      },
+    ]
+  },
+  {
+    title: 'Authentication',
+    apis: [
+      {
+        name: "Register User",
+        method: "POST",
+        description: "create a user .",
+        image: "/authentication/signup.png",
+        endpoint: "https://auth-lsp.onrender.com/api/v1/auth/signup",
+        input: `{
+    "username" : "hell123",
+    "email" : "hell@gmail.com",
+    "password": "12345678"
+}`,
+        output: `{
+    "data": {
+    "message": "User signed up successfully.",
+    "user": {
+        "username": "hell1234",
+        "email": "hell1234@gmail.com",
+        "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
+        "_id": "68ad531b3b4c748ee8546bd9",
+        "__v": 0
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YWQ1MzFiM2I0Yzc0OGVlODU0NmJkOSIsInVzZXJuYW1lIjoiaGVsbDEyMzQiLCJlbWFpbCI6ImhlbGwxMjM0QGdtYWlsLmNvbSIsImlhdCI6MTc1NjE4OTQ2N30.t0lUoFXEY_VKR4ExlPRpDzIWcxiolNPDATSG_WDzhBo"
+}`,
+        codeSamples: {
+          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+            data
+            })
+          })
+          .then(res => res.json())
+          .then(data => console.log(data));`,
+          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/signup", {
+            bodyData
+          }).then(res => {
+            console.log(res.data);
+          });`,
+          python: `import requests
+          
+          data = {
+    "username" : "hell123",
+    "email" : "hell@gmail.com",
+    "password": "12345678"
+}
+          
+          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
+          print(response.json())`
+        }
+      },
+      {
+        name: "sign in the User",
+        method: "POST",
+        description: "sign in that  user .",
+        image: "/authentication/signin.png",
+        endpoint: "https://auth-lsp.onrender.com/api/v1/auth/signin",
+        input: `{
+    "username" : "hell123",
+    "email" : "hell@gmail.com",
+    "password": "12345678"
+}`,
+        output: `{
+    "data": {
+    "message": "User signin successfully.",
+    "user": {
+        "email": "hell1234@gmail.com",
+        "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
+        "_id": "68ad531b3b4c748ee8546bd9",
+        "__v": 0
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YWQ1MzFiM2I0Yzc0OGVlODU0NmJkOSIsInVzZXJuYW1lIjoiaGVsbDEyMzQiLCJlbWFpbCI6ImhlbGwxMjM0QGdtYWlsLmNvbSIsImlhdCI6MTc1NjE4OTQ2N30.t0lUoFXEY_VKR4ExlPRpDzIWcxiolNPDATSG_WDzhBo"
+}`,
+        codeSamples: {
+          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/signin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+            data
+            })
+          })
+          .then(res => res.json())
+          .then(data => console.log(data));`,
+          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/signin", {
+            bodyData
+          }).then(res => {
+            console.log(res.data);
+          });`,
+          python: `import requests
+          
+          data = {
+    "email" : "hell@gmail.com",
+    "password": "12345678"
+}
+          
+          response = requests.post("https://api.learnsphere.com/youtube/signin", json=data)
+          print(response.json())`
+        }
+      },
+      {
+        name: "me",
+        method: "GET",
+        description: "Find out the user .",
+        image: "/authentication/me.png",
+        endpoint: "https://auth-lsp.onrender.com/api/v1/auth/signin",
+        input: `{}`,
+        output: `{
+    "data": {
+    "message": "User signin successfully.",
+    "user": {
+        "username" : "hell1234"
+        "email": "hell1234@gmail.com",
+        "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
+        "_id": "68ad531b3b4c748ee8546bd9",
+    },
+}`,
+        codeSamples: {
+          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/me", {
+            method: "GET",
+          })
+          .then(res => res.json())
+          .then(data => console.log(data));`,
+          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/me")
+          .then(res => {
+            console.log(res.data);
+          });`,
+          python: `import requests
+          
+          response = requests.post("https://api.learnsphere.com/youtube/me",)
+          print(response.json())`
+        }
+      },
+      {
+        name: "logout",
+        method: "GET",
+        description: "log out the user .",
+        image: "/authentication/logout.png",
+        endpoint: "https://auth-lsp.onrender.com/api/v1/auth/logout",
+        input: `{}`,
+        output: `{
+    "message": "User log out ."
+}`,
+        codeSamples: {
+          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/logout", {
+            method: "GET",
+          })
+          .then(res => res.json())
+          .then(data => console.log(data));`,
+          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/logout")
+          .then(res => {
+            console.log(res.data);
+          });`,
+          python: `import requests
+          
+          response = requests.post("https://api.learnsphere.com/youtube/me",)
           print(response.json())`
         }
       },
