@@ -851,98 +851,190 @@ export const apiGroups = [
         description: "Registers a new user on the platform by collecting essential details like fullname, email, and password, username, . Ensures data validation and securely stores user credentials.",
         image: "/social_media/register.png",
         endpoint: "https://learnsphere-ln9j.onrender.com/api/v1/users/register",
-        input: `{
-                  "fullName": "test_llive_2",
-                  "email": "testliveapireal2@gmail.com",
-                  "username": "testliveapireal2",
-                  "password" : "12345678",
-                  "avatar" : "https://demoImage.url",
-                  "coverImage" : "https://demoImage.url",
-                  
+        input: `
+{
+  "fullName": "test_llive_2",
+  "email": "testliveapireal2@gmail.com",
+  "username": "testliveapireal2",
+  "password" : "12345678",
+  "avatar" : "https://demoImage.url",
+  "coverImage" : "https://demoImage.url",             
 }`,
         output:
           `{
-                  "status": "success",
-                  "videoId": "abc123"
+    "statusCode": 200,
+    "data": {
+        "_id": "68b95b9e77a0e024719b2c5d",
+        "username": "testliveapireal3",
+        "email": "testliveapireal3@gmail.com",
+        "fullName": "test_llive_3",
+        "avatar": "http://res.cloudinary.com/ytsobhan/video/upload/v1756978077/knsboxjmf1bjbtmaobe0.mp4",
+        "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
+        "watchHistory": [],
+        "createdAt": "2025-09-04T09:27:58.780Z",
+        "updatedAt": "2025-09-04T09:27:58.780Z",
+        "__v": 0
+    },
+    "message": "User Register Successfully",
+    "success": true
 }`,
         codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
+          node: `fetch("https://learnsphere-ln9j.onrender.com/api/v1/users/register", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
+  "fullName": "test_llive_2",
+  "email": "testliveapireal2@gmail.com",
+  "username": "testliveapireal2",
+  "password" : "12345678",
+  "avatar" : "https://demoImage.url",
+  "coverImage" : "https://demoImage.url",             
+
           })
           .then(res => res.json())
           .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
+          axios: `axios.post("https://learnsphere-ln9j.onrender.com/api/v1/users/register", {
+  "fullName": "test_llive_2",
+  "email": "testliveapireal2@gmail.com",
+  "username": "testliveapireal2",
+  "password" : "12345678",
+  "avatar" : "https://demoImage.url",
+  "coverImage" : "https://demoImage.url",             
+).then(res => {
             console.log(res.data);
           });`,
           python: `import requests
           
           data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
+  "fullName": "test_llive_2",
+  "email": "testliveapireal2@gmail.com",
+  "username": "testliveapireal2",
+  "password" : "12345678",
+  "avatar" : "https://demoImage.url",
+  "coverImage" : "https://demoImage.url",             
+
           
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
+          response = requests.post("https://learnsphere-ln9j.onrender.com/api/v1/users/register", json=data)
           print(response.json())`
         }
       },
       {
-        name: "Upload Video",
+        name: "login ",
         method: "POST",
-        description: "Uploads a video to the YouTube backend.",
-        image: "/demo.png",
-        endpoint: "/youtube/upload",
-        input: `{
-            "title": "My Video",
-            "description": "This is a test upload.",
-            "file": "<binary>"
-          }`,
+        description: "Login with that user .",
+        image: "/social_media/login.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/login",
+        input: `        
+{
+    "username" : "testliveapireal3",
+    "password" : "12345678"
+}`,
         output: `{
-            "status": "success",
-            "videoId": "abc123"
-          }`,
+    "statusCode": 200,
+    "data": {
+        "user": {
+            "_id": "68b95b9e77a0e024719b2c5d",
+            "username": "testliveapireal3",
+            "email": "testliveapireal3@gmail.com",
+            "fullName": "test_llive_3",
+            "avatar": "http://res.cloudinary.com/ytsobhan/video/upload/v1756978077/knsboxjmf1bjbtmaobe0.mp4",
+            "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
+            "watchHistory": [],
+            "createdAt": "2025-09-04T09:27:58.780Z",
+            "updatedAt": "2025-09-04T09:52:40.222Z",
+            "__v": 0
+        },
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1NzA2NTk2MH0.S3f7Ogb13dA1msp14DUj61d1l_Z8alo3YTtU15G0UFI",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1Nzg0MzU2MH0.qk7eQr-jtXgKoopeNmLg03_sVhc_1ahyFd_gxOfPapo"
+    },
+    "message": "User logged In Successfully",
+    "success": true
+}`,
         codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
+          node: `fetch("https://social-media-3cdj.onrender.com/api/v1/users/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
+    "username" : "testliveapireal3",
+    "password" : "12345678"
+})
           })
           .then(res => res.json())
           .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
+          axios: `axios.post("https://social-media-3cdj.onrender.com/api/v1/users/login", data).then(res => {
             console.log(res.data);
           });`,
           python: `import requests
           
           data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
+    "username" : "testliveapireal3",
+    "password" : "12345678"
+}
           
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
+          response = requests.post("https://social-media-3cdj.onrender.com/api/v1/users/login", json=data)
+          print(response.json())`
+        }
+      },
+      {
+        name: "login ",
+        method: "POST",
+        description: "Login with that user .",
+        image: "/social_media/login.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/login",
+        input: `        
+{
+    "username" : "testliveapireal3",
+    "password" : "12345678"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "user": {
+            "_id": "68b95b9e77a0e024719b2c5d",
+            "username": "testliveapireal3",
+            "email": "testliveapireal3@gmail.com",
+            "fullName": "test_llive_3",
+            "avatar": "http://res.cloudinary.com/ytsobhan/video/upload/v1756978077/knsboxjmf1bjbtmaobe0.mp4",
+            "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
+            "watchHistory": [],
+            "createdAt": "2025-09-04T09:27:58.780Z",
+            "updatedAt": "2025-09-04T09:52:40.222Z",
+            "__v": 0
+        },
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1NzA2NTk2MH0.S3f7Ogb13dA1msp14DUj61d1l_Z8alo3YTtU15G0UFI",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1Nzg0MzU2MH0.qk7eQr-jtXgKoopeNmLg03_sVhc_1ahyFd_gxOfPapo"
+    },
+    "message": "User logged In Successfully",
+    "success": true
+}`,
+        codeSamples: {
+          node: `fetch("https://social-media-3cdj.onrender.com/api/v1/users/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+    "username" : "testliveapireal3",
+    "password" : "12345678"
+})
+          })
+          .then(res => res.json())
+          .then(data => console.log(data));`,
+          axios: `axios.post("https://social-media-3cdj.onrender.com/api/v1/users/login", data).then(res => {
+            console.log(res.data);
+          });`,
+          python: `import requests
+          
+          data = {
+    "username" : "testliveapireal3",
+    "password" : "12345678"
+}
+          
+          response = requests.post("https://social-media-3cdj.onrender.com/api/v1/users/login", json=data)
           print(response.json())`
         }
       }
