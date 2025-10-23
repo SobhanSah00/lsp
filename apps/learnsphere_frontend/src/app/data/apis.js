@@ -831,6 +831,98 @@ export const apiGroups = [
     "success": true
 }`
       },
+      {
+        name: "create_tweet",
+        method: "POST",
+        description: "Create the tweet . ",
+        image: "/social_media/create_tweet.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/tweet/createTweet",
+        input: `{
+     "content" : "helllo guys this is my new tweet live api test"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "content": "helllo guys this is my new tweet live api test",
+        "owner": "68b95b9e77a0e024719b2c5d",
+        "_id": "68fa2d7346f73d48e5702b44",
+        "createdAt": "2025-10-23T13:28:19.645Z",
+        "updatedAt": "2025-10-23T13:28:19.645Z",
+        "__v": 0
+    },
+    "message": "Tweet created successfully. ✅",
+    "success": true
+}`
+      },
+      {
+        name: "update_tweet",
+        method: "PATCH",
+        description: "update the existing tweet . ",
+        image: "/social_media/update_tweet.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/tweet/updateTweet/{{YOUR_TWEET_ID}}",
+        input: `{
+    "content" : "helllo guys this is my new tweet live api test updated"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "_id": "68fa2d7346f73d48e5702b44",
+        "content": "helllo guys this is my new tweet live api test updated",
+        "owner": "68b95b9e77a0e024719b2c5d",
+        "createdAt": "2025-10-23T13:28:19.645Z",
+        "updatedAt": "2025-10-23T14:09:49.287Z",
+        "__v": 0
+    },
+    "message": "Tweet updated successfully ✅",
+    "success": true
+}`
+      },
+      {
+        name: "Get_User_Tweets",
+        method: "GET",
+        description: "Get the tweets which is create by that particular user .",
+        image: "/social_media/get_user_tweets.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/tweet/user/{{USER_ID}}",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": "Tweets fetched successfully",
+    "message": [
+        {
+            "_id": "68fa2d7346f73d48e5702b44",
+            "content": "helllo guys this is my new tweet live api test updated",
+            "createdAt": "2025-10-23T13:28:19.645Z",
+            "ownerInfo": [
+                {
+                    "_id": "68b95b9e77a0e024719b2c5d",
+                    "username": "testliveapireal3"
+                }
+            ],
+            "commentsInfo": [],
+            "likesCount": 0,
+            "commentsCount": 0,
+            "isLiked": false
+        }
+    ],
+    "success": true
+}`
+      },
+      {
+        name: "delete_tweets",
+        method: "DELETE",
+        description: "Delete the tweet .",
+        image: "/social_media/delete_Tweets.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/tweet/tweet/deleteTweet/{{TWEET_ID}}",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "tweetId": "68fa2d7346f73d48e5702b44"
+    },
+    "message": "Tweet deleted successfully",
+    "success": true
+}`
+      },
     ]
   }
 ];

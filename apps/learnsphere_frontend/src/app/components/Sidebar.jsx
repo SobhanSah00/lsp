@@ -12,7 +12,13 @@ const methodColors = {
 };
 
 export default function Sidebar() {
-  const [expandedGroups, setExpandedGroups] = useState({});
+  const [expandedGroups, setExpandedGroups] = useState(() => {
+    const initialState = {};
+    apiGroups.forEach(group => {
+      initialState[group.title] = true;
+    });
+    return initialState;
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const sidebarRef = useRef(null);
   const groupRefs = useRef({});
@@ -26,7 +32,7 @@ export default function Sidebar() {
 
   const filterApis = () => {
     if (!searchQuery.trim()) return apiGroups;
-    
+
     return apiGroups
       .map(group => ({
         ...group,
@@ -41,12 +47,12 @@ export default function Sidebar() {
 
   useEffect(() => {
     const expandedGroupTitle = Object.keys(expandedGroups).find(title => expandedGroups[title]);
-    
+
     if (expandedGroupTitle && groupRefs.current[expandedGroupTitle]) {
       const groupElement = groupRefs.current[expandedGroupTitle];
       const groupRect = groupElement.getBoundingClientRect();
       const sidebarRect = sidebarRef.current.getBoundingClientRect();
-      
+
       if (groupRect.bottom > sidebarRect.bottom) {
         groupElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -59,7 +65,7 @@ export default function Sidebar() {
     <div className="bg-black/95 backdrop-blur-xl border-r border-gray-800/50 text-white h-full w-80 flex flex-col relative">
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/50 via-black/90 to-gray-900/50 pointer-events-none"></div>
-      
+
       {/* Header */}
       <div className="relative p-6 border-b border-gray-800/50">
         <div className="flex items-center space-x-3 mb-6">
@@ -77,7 +83,7 @@ export default function Sidebar() {
             <p className="text-sm text-gray-400">Documentation Platform</p>
           </div>
         </div>
-        
+
         {/* Search Bar */}
         <div className="relative">
           <input
@@ -95,16 +101,16 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      
+
       {/* API Groups */}
-      <div 
+      <div
         ref={sidebarRef}
         className="relative overflow-y-auto flex-grow custom-scrollbar"
       >
         <div className="p-4 space-y-2">
           {filteredGroups.map((group, index) => (
-            <div 
-              key={group.title} 
+            <div
+              key={group.title}
               className="group"
               ref={el => groupRefs.current[group.title] = el}
             >
@@ -113,12 +119,11 @@ export default function Sidebar() {
                 className="w-full flex items-center justify-between p-4 hover:bg-gray-800/50 rounded-xl transition-all duration-200 text-left group-hover:scale-[1.02] transform"
               >
                 <div className="flex items-center space-x-3">
-                  <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${
-                    index % 4 === 0 ? 'from-blue-400 to-purple-500' :
-                    index % 4 === 1 ? 'from-emerald-400 to-cyan-500' :
-                    index % 4 === 2 ? 'from-amber-400 to-orange-500' :
-                    'from-pink-400 to-red-500'
-                  }`}></div>
+                  <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${index % 4 === 0 ? 'from-blue-400 to-purple-500' :
+                      index % 4 === 1 ? 'from-emerald-400 to-cyan-500' :
+                        index % 4 === 2 ? 'from-amber-400 to-orange-500' :
+                          'from-pink-400 to-red-500'
+                    }`}></div>
                   <span className="font-semibold text-gray-100">{group.title}</span>
                   <span className="bg-gray-800/60 text-gray-300 text-xs px-2.5 py-1 rounded-full font-medium">
                     {group.apis.length}
@@ -134,19 +139,17 @@ export default function Sidebar() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className={`transition-transform duration-200 text-gray-400 ${
-                    expandedGroups[group.title] ? 'transform rotate-180' : ''
-                  }`}
+                  className={`transition-transform duration-200 text-gray-400 ${expandedGroups[group.title] ? 'transform rotate-180' : ''
+                    }`}
                 >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
-              
-              <div className={`transition-all duration-300 ${
-                expandedGroups[group.title] 
-                  ? 'opacity-100' 
+
+              <div className={`transition-all duration-300 ${expandedGroups[group.title]
+                  ? 'opacity-100'
                   : 'max-h-0 opacity-0 overflow-hidden'
-              }`}>
+                }`}>
                 <div className="ml-6 mt-2 space-y-1">
                   {group.apis.map((api) => {
                     const route = `/${group.title.toLowerCase()}/${api.name.toLowerCase().replace(/\s+/g, "-")}`;
@@ -171,7 +174,7 @@ export default function Sidebar() {
           ))}
         </div>
       </div>
-      
+
       {/* Footer */}
       <div className="relative p-4 border-t border-gray-800/50">
         <div className="flex items-center justify-between text-xs text-gray-400">
@@ -182,7 +185,7 @@ export default function Sidebar() {
           <span className="font-mono">v2.0.0</span>
         </div>
       </div>
-      
+
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;

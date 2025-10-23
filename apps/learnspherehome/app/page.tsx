@@ -39,7 +39,6 @@ export default function LandingPage() {
   }
 
   const HnadleToAnotherPage = () => {
-    // <a href={`${baseUrl}/todo/create-todo`} target="_replace" rel="noopener noreferrer"/>
     window.open(`${baseUrl}/todo/create-todo`)
   }
 
@@ -67,7 +66,7 @@ export default function LandingPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              API Sphere
+              LSP
             </h1>
           </div>
         </div>
@@ -236,11 +235,11 @@ export default function LandingPage() {
                   <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                 </svg>
               </div>
-              <span className="font-semibold text-gray-300">API Sphere</span>
+              <span className="font-semibold text-gray-300">LSP</span>
             </div>
 
             <div className="flex items-center space-x-6 text-sm text-gray-400">
-              <span>© 2025 API Sphere</span>
+              <span>© 2025 LSP</span>
               <span>•</span>
               <button className="cursor-not-allowed hover:text-white transition-colors">Documentation</button>
               <button onClick={() => ContactSupport()} className="hover:text-white transition-colors">Support</button>
