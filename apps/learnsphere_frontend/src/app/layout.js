@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "API Sphere Documentation",
+  title: "LSP DOCS",
   description: "Comprehensive API documentation platform",
 };
 

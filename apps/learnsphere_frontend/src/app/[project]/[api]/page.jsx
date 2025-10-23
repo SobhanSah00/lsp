@@ -97,12 +97,12 @@ export default function ApiPage({ params }) {
   const getCodeExample = (language) => {
     const endpoint = apiData?.endpoint || `/api/${projectName}/${apiName}`;
     const method = apiData?.method || 'GET';
-    
+
     // Use custom code samples if available, otherwise generate default ones
     if (apiData?.codeSamples && apiData.codeSamples[language]) {
       return apiData.codeSamples[language];
     }
-    
+
     switch (language) {
       case 'node':
         return `const axios = require('axios');
@@ -365,11 +365,10 @@ console.log(data);`;
               </div>
             </div>
             <pre
-              className={`${codeClass} p-4 rounded-lg text-sm font-mono border ${
-                isLargeContent(requestParams) && !expandedSections.requestBody
+              className={`${codeClass} p-4 rounded-lg text-sm font-mono border ${isLargeContent(requestParams) && !expandedSections.requestBody
                   ? 'max-h-32 overflow-hidden relative'
                   : 'overflow-auto'
-              } ${darkMode ? 'text-slate-300' : 'text-slate-800'}`}
+                } ${darkMode ? 'text-slate-300' : 'text-slate-800'}`}
             >
               {requestParams || '{}'}
               {isLargeContent(requestParams) && !expandedSections.requestBody && (
@@ -411,11 +410,10 @@ console.log(data);`;
               </div>
             </div>
             <pre
-              className={`${codeClass} p-4 rounded-lg text-sm font-mono border ${
-                isLargeContent(apiData.output) && !expandedSections.response
+              className={`${codeClass} p-4 rounded-lg text-sm font-mono border ${isLargeContent(apiData.output) && !expandedSections.response
                   ? 'max-h-32 overflow-hidden relative'
                   : 'overflow-auto'
-              } ${darkMode ? 'text-slate-300' : 'text-slate-800'}`}
+                } ${darkMode ? 'text-slate-300' : 'text-slate-800'}`}
             >
               {typeof apiData.output === 'string' ? apiData.output : JSON.stringify(apiData.output, null, 2) || '{}'}
               {isLargeContent(apiData.output) && !expandedSections.response && (
@@ -495,20 +493,19 @@ console.log(data);`;
               <button
                 key={lang}
                 onClick={() => setCodeTab(lang)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  codeTab === lang
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${codeTab === lang
                     ? darkMode
                       ? "bg-blue-600 text-white"
                       : "bg-slate-800 text-white"
                     : darkMode
                       ? "bg-slate-700 text-slate-300 hover:bg-slate-600"
                       : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
+                  }`}
               >
                 {lang === "node" ? "Node.js" :
                   lang === "axios" ? "Axios" :
                     lang === "python" ? "Python" :
-                      lang === "curl" ? "cURL" : 
+                      lang === "curl" ? "cURL" :
                         lang === "javascript" ? "JavaScript" : lang}
               </button>
             ))}
@@ -517,11 +514,10 @@ console.log(data);`;
           <div className="relative">
             <pre
               ref={codeRef}
-              className={`${codeClass} p-4 rounded-lg text-sm font-mono border ${
-                isLargeContent(getCodeExample(codeTab)) && !expandedSections.codeExample
+              className={`${codeClass} p-4 rounded-lg text-sm font-mono border ${isLargeContent(getCodeExample(codeTab)) && !expandedSections.codeExample
                   ? 'max-h-48 overflow-hidden relative'
                   : 'overflow-auto'
-              } ${darkMode ? 'text-slate-300' : 'text-slate-800'}`}
+                } ${darkMode ? 'text-slate-300' : 'text-slate-800'}`}
             >
               {getCodeExample(codeTab)}
               {isLargeContent(getCodeExample(codeTab)) && !expandedSections.codeExample && (
@@ -548,13 +544,12 @@ console.log(data);`;
             <div className="space-y-3">
               {apiData.responseCodes.map((code, index) => (
                 <div key={index} className={`flex items-center space-x-4 p-3 rounded-lg ${darkMode ? 'bg-black/30' : 'bg-gray-50'}`}>
-                  <span className={`px-3 py-1 rounded-full text-sm font-mono font-medium ${
-                    code.status >= 200 && code.status < 300 
+                  <span className={`px-3 py-1 rounded-full text-sm font-mono font-medium ${code.status >= 200 && code.status < 300
                       ? darkMode ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-green-100 text-green-800'
                       : code.status >= 400 && code.status < 500
                         ? darkMode ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'bg-yellow-100 text-yellow-800'
                         : darkMode ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-red-100 text-red-800'
-                  }`}>
+                    }`}>
                     {code.status}
                   </span>
                   <div className="flex-1">
@@ -582,30 +577,28 @@ console.log(data);`;
                   </span>
                 </label>
                 <textarea
-                  className={`w-full rounded-lg p-4 text-sm font-mono border focus:outline-none focus:ring-2 resize-none transition-all ${
-                    darkMode 
-                      ? 'bg-slate-800 border-slate-600 text-slate-300 focus:ring-blue-500/50 focus:border-blue-500/50' 
+                  className={`w-full rounded-lg p-4 text-sm font-mono border focus:outline-none focus:ring-2 resize-none transition-all ${darkMode
+                      ? 'bg-slate-800 border-slate-600 text-slate-300 focus:ring-blue-500/50 focus:border-blue-500/50'
                       : 'bg-white border-slate-300 text-slate-800 focus:ring-blue-500 focus:border-blue-500'
-                  }`}
+                    }`}
                   rows="8"
                   value={requestParams}
                   onChange={(e) => setRequestParams(e.target.value)}
                   placeholder="Enter your JSON request body here..."
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={handleSendRequest}
                     disabled={isLoading}
-                    className={`${
-                      isLoading
+                    className={`${isLoading
                         ? 'bg-gray-500 cursor-not-allowed'
                         : darkMode
                           ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
                           : 'bg-blue-600 hover:bg-blue-700'
-                    } text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-300 shadow-lg`}
+                      } text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-300 shadow-lg`}
                   >
                     {isLoading ? (
                       <>
@@ -621,27 +614,26 @@ console.log(data);`;
                       </>
                     )}
                   </button>
-                  
+
                   {!isLoading && (
                     <button
                       onClick={() => {
-                        setRequestParams(apiData?.input ? 
-                          (typeof apiData.input === 'string' ? apiData.input : JSON.stringify(apiData.input, null, 2)) 
+                        setRequestParams(apiData?.input ?
+                          (typeof apiData.input === 'string' ? apiData.input : JSON.stringify(apiData.input, null, 2))
                           : JSON.stringify({}, null, 2)
                         );
                         setResponse(null);
                       }}
-                      className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                        darkMode 
-                          ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' 
+                      className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${darkMode
+                          ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                           : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                      }`}
+                        }`}
                     >
                       Reset
                     </button>
                   )}
                 </div>
-                
+
                 {/* Request URL Preview */}
                 <div className={`text-xs ${darkMode ? 'text-slate-500' : 'text-slate-500'} font-mono`}>
                   {apiData.method} /api/{projectName}/{apiName.replace(' ', '-')}
@@ -657,11 +649,10 @@ console.log(data);`;
                     Response
                   </h3>
                   <div className="flex items-center space-x-3">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      response.status === 200 
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${response.status === 200
                         ? darkMode ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-green-100 text-green-800'
                         : darkMode ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-red-100 text-red-800'
-                    }`}>
+                      }`}>
                       {response.status} {response.status === 200 ? 'OK' : 'Error'}
                     </span>
                     {response.status === 200 && (
@@ -678,21 +669,19 @@ console.log(data);`;
                     )}
                   </div>
                 </div>
-                
-                <div className={`rounded-lg border p-4 ${
-                  response.status === 200 
+
+                <div className={`rounded-lg border p-4 ${response.status === 200
                     ? darkMode ? 'bg-green-500/5 border-green-500/20' : 'bg-green-50 border-green-200'
                     : darkMode ? 'bg-red-500/5 border-red-500/20' : 'bg-red-50 border-red-200'
-                }`}>
-                  <pre className={`text-sm font-mono whitespace-pre-wrap overflow-x-auto ${
-                    response.status === 200 
+                  }`}>
+                  <pre className={`text-sm font-mono whitespace-pre-wrap overflow-x-auto ${response.status === 200
                       ? darkMode ? 'text-green-300' : 'text-green-800'
                       : darkMode ? 'text-red-300' : 'text-red-800'
-                  }`}>
+                    }`}>
                     {response.status === 200 ? response.data : response.error}
                   </pre>
                 </div>
-                
+
                 {/* Response Headers Simulation */}
                 <div className="mt-4">
                   <h4 className={`text-sm font-medium mb-2 ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>Response Headers</h4>

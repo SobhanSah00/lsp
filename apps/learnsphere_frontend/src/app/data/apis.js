@@ -1,3 +1,55 @@
+const generateCodeSamples = (method, endpoint, input) => {
+  const hasBody = method === 'POST' || method === 'PATCH' || method === 'PUT';
+  const inputData = input && input !== 'NOT REQUIRED' && !input.includes('GET REQUEST') ? input : null;
+  
+  return {
+    node: hasBody && inputData
+      ? `fetch("${endpoint}", {
+  method: "${method}",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(${inputData})
+})
+.then(res => res.json())
+.then(data => console.log(data));`
+      : `fetch("${endpoint}", {
+  method: "${method}"
+})
+.then(res => res.json())
+.then(data => console.log(data));`,
+    
+    axios: hasBody && inputData
+      ? `axios.${method.toLowerCase()}("${endpoint}", ${inputData})
+.then(res => {
+  console.log(res.data);
+});`
+      : `axios.${method.toLowerCase()}("${endpoint}")
+.then(res => {
+  console.log(res.data);
+});`,
+    
+    python: hasBody && inputData
+      ? `import requests
+
+data = ${inputData}
+
+response = requests.${method.toLowerCase()}("${endpoint}", json=data)
+print(response.json())`
+      : `import requests
+
+response = requests.${method.toLowerCase()}("${endpoint}")
+print(response.json())`,
+
+    curl: hasBody && inputData
+      ? `curl -X ${method} "${endpoint}" \\
+  -H "Content-Type: application/json" \\
+  -d '${inputData}'`
+      : `curl -X ${method} "${endpoint}"`
+  };
+};
+
+// Your API Groups - Now you only define endpoint, method, input once!
 export const apiGroups = [
   {
     title: 'Todo',
@@ -19,9 +71,7 @@ export const apiGroups = [
         "completed": false,
         "dueDate": null,
         "priority": 2,
-        "tags": [
-            "personal"
-        ],
+        "tags": ["personal"],
         "_id": "681a6968629ef9b1ff4f2bf8",
         "createdAt": "2025-05-06T19:56:24.824Z",
         "updatedAt": "2025-05-06T19:56:24.824Z",
@@ -29,40 +79,7 @@ export const apiGroups = [
     },
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/createTodo", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-            {
-                "title" : "test Todo 18",
-                "priority" : 2
-            }
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
         name: "get all todo",
@@ -70,77 +87,28 @@ export const apiGroups = [
         description: "A request to get all todos which has been created .",
         image: "/Todo/getTodo.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getAllTodo",
-        input: `{
-        THIS IS A GET REQUEST SO NO NEED TO BE ANY INPUT
-}`,
+        input: `NOT REQUIRED`,
         output: `{
-        "statusCode": "Todos retrieved successfully",
-        "data": [
+    "statusCode": "Todos retrieved successfully",
+    "data": [
         {
             "_id": "6807a3775238d60ff443e25d",
             "title": "this is update version of test todod 1",
             "completed": false,
             "dueDate": null,
             "priority": 1,
-            "tags": [
-                "personal"
-            ],
+            "tags": ["personal"],
             "createdAt": "2025-04-22T14:11:03.481Z",
             "updatedAt": "2025-04-22T14:22:45.509Z",
             "__v": 0
-        },
-        {
-            "_id": "6807a3ae5238d60ff443e25f",
-            "title": "hii this is test todo 1",
-            "completed": false,
-            "dueDate": null,
-            "priority": 1,
-            "tags": [
-                "personal"
-            ],
-            "createdAt": "2025-04-22T14:11:58.109Z",
-            "updatedAt": "2025-04-22T14:11:58.109Z",
-            "__v": 0
-        },
-      ],
+        }
+    ],
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
-        name: "update Todo ",
+        name: "update Todo",
         method: "PATCH",
         description: "update a todo adding the title .",
         image: "/Todo/updateTodo.png",
@@ -148,7 +116,7 @@ export const apiGroups = [
         input: `{
     "title" : "test Todo 13",
     "priority" : 1,
-    tags :[''urgent']
+    "tags" :["urgent"]
 }`,
         output: `{
     "statusCode": "Todo updated successfully",
@@ -158,51 +126,17 @@ export const apiGroups = [
         "completed": false,
         "dueDate": null,
         "priority": 2,
-        "tags": [
-            "urgent"
-        ],
+        "tags": ["urgent"],
         "createdAt": "2025-05-06T19:56:24.824Z",
         "updatedAt": "2025-05-06T20:08:46.911Z",
         "__v": 0
     },
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
-        name: "delete Todo ",
+        name: "delete Todo",
         method: "DELETE",
         description: "delete the Todo title.IMPORTANT , this is only delete the completed todo, this not going to be deleted the incomplete todos.",
         image: "/Todo/deleteTodo.png",
@@ -213,44 +147,12 @@ export const apiGroups = [
     "errors": [],
     "data": null,
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
-        name: "markAsComplete Todo ",
+        name: "markAsComplete Todo",
         method: "PATCH",
-        description: "delete the Todo title",
+        description: "mark the Todo as complete",
         image: "/Todo/markAsComplete.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/markAsComplete/{SPECIFIC_CREATED_TODO_ID}",
         input: `NOT REQUIRED`,
@@ -262,59 +164,22 @@ export const apiGroups = [
         "completed": true,
         "dueDate": null,
         "priority": 2,
-        "tags": [
-            "personal"
-        ],
+        "tags": ["personal"],
         "createdAt": "2025-05-06T20:13:49.173Z",
         "updatedAt": "2025-05-06T20:15:10.359Z",
         "__v": 0
     },
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
         name: "getTodoSomeMethods",
         method: "GET",
         description: "GET the todo by some methods like or priority and tags .",
         image: "/Todo/getTodoSomeMethods.png",
-        endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoSomeMethods?{SPECIFIC_QUERY}",
-        input: `{
-        "priority" : 5,
-        "tag" : "urgent"
-}`,
+        endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoSomeMethods?priority=5&tag=urgent",
+        input: `NOT REQUIRED`,
         output: `{
     "statusCode": "Todos retrieved successfully",
     "data": [
@@ -324,75 +189,15 @@ export const apiGroups = [
             "completed": false,
             "dueDate": null,
             "priority": 1,
-            "tags": [
-                "urgent"
-            ],
+            "tags": ["urgent"],
             "createdAt": "2025-04-22T14:12:18.258Z",
             "updatedAt": "2025-04-22T14:33:26.710Z",
-            "__v": 0
-        },
-        {
-            "_id": "6807a42c5238d60ff443e269",
-            "title": "hii this is test todo 5",
-            "completed": false,
-            "dueDate": "2025-05-03T12:00:00.000Z",
-            "priority": 1,
-            "tags": [
-                "urgent"
-            ],
-            "createdAt": "2025-04-22T14:14:04.872Z",
-            "updatedAt": "2025-04-22T14:14:04.872Z",
-            "__v": 0
-        },
-        {
-            "_id": "681a6968629ef9b1ff4f2bf8",
-            "title": "test Todo 14",
-            "completed": false,
-            "dueDate": null,
-            "priority": 2,
-            "tags": [
-                "urgent"
-            ],
-            "createdAt": "2025-05-06T19:56:24.824Z",
-            "updatedAt": "2025-05-06T20:08:46.911Z",
             "__v": 0
         }
     ],
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
         name: "getTodoById",
@@ -409,48 +214,14 @@ export const apiGroups = [
         "completed": false,
         "dueDate": null,
         "priority": 4,
-        "tags": [
-            "personal"
-        ],
+        "tags": ["personal"],
         "createdAt": "2025-04-22T15:06:13.743Z",
         "updatedAt": "2025-04-22T15:06:13.743Z",
         "__v": 0
     },
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
         name: "deleteAllTodo",
@@ -464,49 +235,15 @@ export const apiGroups = [
     "errors": [],
     "data": null,
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
         name: "getTodoByDueDates",
         method: "GET",
         description: "GET the all todo stats",
         image: "/Todo/getTodoByDueDates.png",
-        endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoByDueDates/?query={SPECIFIC DATE}",
-        input: `{
-        "after" : 2025-05-01
-}`,
+        endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/getTodoByDueDates/?after=2025-05-01",
+        input: `NOT REQUIRED`,
         output: `{
     "statusCode": "Todos retrieved by due date successfully",
     "data": [
@@ -516,75 +253,15 @@ export const apiGroups = [
             "completed": false,
             "dueDate": "2025-05-01T12:00:00.000Z",
             "priority": 1,
-            "tags": [
-                "work"
-            ],
+            "tags": ["work"],
             "createdAt": "2025-04-22T14:13:37.987Z",
             "updatedAt": "2025-04-22T14:13:37.987Z",
-            "__v": 0
-        },
-        {
-            "_id": "6807a42c5238d60ff443e269",
-            "title": "hii this is test todo 5",
-            "completed": false,
-            "dueDate": "2025-05-03T12:00:00.000Z",
-            "priority": 1,
-            "tags": [
-                "urgent"
-            ],
-            "createdAt": "2025-04-22T14:14:04.872Z",
-            "updatedAt": "2025-04-22T14:14:04.872Z",
-            "__v": 0
-        },
-        {
-            "_id": "6807a4435238d60ff443e26b",
-            "title": "hii this is test todo 6",
-            "completed": false,
-            "dueDate": "2025-05-05T12:00:00.000Z",
-            "priority": 1,
-            "tags": [
-                "personal"
-            ],
-            "createdAt": "2025-04-22T14:14:27.244Z",
-            "updatedAt": "2025-04-22T14:14:27.244Z",
             "__v": 0
         }
     ],
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
         name: "TODO STATS",
@@ -592,9 +269,7 @@ export const apiGroups = [
         description: "GET the all todos, analayze the data , when this completed, after duedate or not and mayny thing...",
         image: "/Todo/todoStats.png",
         endpoint: "https://todo-backend-by-learnsphere.onrender.com/api/v1/todos/todoStats",
-        input: `{
-        NOT REQUIRED
-}`,
+        input: `NOT REQUIRED`,
         output: `{
     "statusCode": "Todo Stats are generated successfully .",
     "data": {
@@ -604,76 +279,20 @@ export const apiGroups = [
         "overdue": 3,
         "upcoming": 0,
         "byPriority": [
-            {
-                "_id": 1,
-                "count": 12
-            },
-            {
-                "_id": 2,
-                "count": 2
-            },
-            {
-                "_id": 4,
-                "count": 2
-            }
+            {"_id": 1, "count": 12},
+            {"_id": 2, "count": 2},
+            {"_id": 4, "count": 2}
         ],
         "byTags": [
-            {
-                "_id": [
-                    "personal"
-                ],
-                "count": 12
-            },
-            {
-                "_id": [
-                    "urgent"
-                ],
-                "count": 3
-            },
-            {
-                "_id": [
-                    "work"
-                ],
-                "count": 1
-            }
+            {"_id": ["personal"], "count": 12},
+            {"_id": ["urgent"], "count": 3},
+            {"_id": ["work"], "count": 1}
         ]
     },
     "message": "Success",
     "success": false
-}`,
-        codeSamples: {
-          node: `fetch("https://api.learnsphere.com/youtube/upload", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: "My Video",
-              description: "This is a test upload",
-              file: "base64StringHere"
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://api.learnsphere.com/youtube/upload", {
-            title: "My Video",
-            description: "This is a test upload",
-            file: "base64StringHere"
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-            "title": "My Video",
-            "description": "This is a test upload",
-            "file": "base64StringHere"
-          }
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
-      },
+}`
+      }
     ]
   },
   {
@@ -692,127 +311,59 @@ export const apiGroups = [
 }`,
         output: `{
     "data": {
-    "message": "User signed up successfully.",
-    "user": {
-        "username": "hell1234",
-        "email": "hell1234@gmail.com",
-        "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
-        "_id": "68ad531b3b4c748ee8546bd9",
-        "__v": 0
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YWQ1MzFiM2I0Yzc0OGVlODU0NmJkOSIsInVzZXJuYW1lIjoiaGVsbDEyMzQiLCJlbWFpbCI6ImhlbGwxMjM0QGdtYWlsLmNvbSIsImlhdCI6MTc1NjE4OTQ2N30.t0lUoFXEY_VKR4ExlPRpDzIWcxiolNPDATSG_WDzhBo"
-}`,
-        codeSamples: {
-          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/signup", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-            data
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/signup", {
-            bodyData
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-    "username" : "hell123",
-    "email" : "hell@gmail.com",
-    "password": "12345678"
-}
-          
-          response = requests.post("https://api.learnsphere.com/youtube/upload", json=data)
-          print(response.json())`
-        }
+        "message": "User signed up successfully.",
+        "user": {
+            "username": "hell1234",
+            "email": "hell1234@gmail.com",
+            "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
+            "_id": "68ad531b3b4c748ee8546bd9",
+            "__v": 0
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+}`
       },
       {
         name: "sign in the User",
         method: "POST",
-        description: "sign in that  user .",
+        description: "sign in that user .",
         image: "/authentication/signin.png",
         endpoint: "https://auth-lsp.onrender.com/api/v1/auth/signin",
         input: `{
-    "username" : "hell123",
     "email" : "hell@gmail.com",
     "password": "12345678"
 }`,
         output: `{
     "data": {
-    "message": "User signin successfully.",
-    "user": {
-        "email": "hell1234@gmail.com",
-        "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
-        "_id": "68ad531b3b4c748ee8546bd9",
-        "__v": 0
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YWQ1MzFiM2I0Yzc0OGVlODU0NmJkOSIsInVzZXJuYW1lIjoiaGVsbDEyMzQiLCJlbWFpbCI6ImhlbGwxMjM0QGdtYWlsLmNvbSIsImlhdCI6MTc1NjE4OTQ2N30.t0lUoFXEY_VKR4ExlPRpDzIWcxiolNPDATSG_WDzhBo"
-}`,
-        codeSamples: {
-          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/signin", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-            data
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/signin", {
-            bodyData
-          }).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-    "email" : "hell@gmail.com",
-    "password": "12345678"
-}
-          
-          response = requests.post("https://api.learnsphere.com/youtube/signin", json=data)
-          print(response.json())`
-        }
+        "message": "User signin successfully.",
+        "user": {
+            "email": "hell1234@gmail.com",
+            "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
+            "_id": "68ad531b3b4c748ee8546bd9",
+            "__v": 0
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+}`
       },
       {
         name: "me",
         method: "GET",
         description: "Find out the user .",
         image: "/authentication/me.png",
-        endpoint: "https://auth-lsp.onrender.com/api/v1/auth/signin",
-        input: `{}`,
+        endpoint: "https://auth-lsp.onrender.com/api/v1/auth/me",
+        input: `NOT REQUIRED`,
         output: `{
     "data": {
-    "message": "User signin successfully.",
-    "user": {
-        "username" : "hell1234"
-        "email": "hell1234@gmail.com",
-        "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
-        "_id": "68ad531b3b4c748ee8546bd9",
-    },
-}`,
-        codeSamples: {
-          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/me", {
-            method: "GET",
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/me")
-          .then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          response = requests.post("https://api.learnsphere.com/youtube/me",)
-          print(response.json())`
+        "message": "User found successfully.",
+        "user": {
+            "username": "hell1234",
+            "email": "hell1234@gmail.com",
+            "password": "$2b$10$x7B2JG2RoYsCKoWRzEyF1uJhLT7r6HgLuB0PmrwUqA4FMsOyuVdLy",
+            "_id": "68ad531b3b4c748ee8546bd9"
         }
+    }
+}`
       },
       {
         name: "logout",
@@ -820,26 +371,11 @@ export const apiGroups = [
         description: "log out the user .",
         image: "/authentication/logout.png",
         endpoint: "https://auth-lsp.onrender.com/api/v1/auth/logout",
-        input: `{}`,
+        input: `NOT REQUIRED`,
         output: `{
     "message": "User log out ."
-}`,
-        codeSamples: {
-          node: `fetch("https://auth-lsp.onrender.com/api/v1/auth/logout", {
-            method: "GET",
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://auth-lsp.onrender.com/api/v1/auth/logout")
-          .then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          response = requests.post("https://api.learnsphere.com/youtube/me",)
-          print(response.json())`
-        }
-      },
+}`
+      }
     ]
   },
   {
@@ -848,20 +384,18 @@ export const apiGroups = [
       {
         name: "register user",
         method: "POST",
-        description: "Registers a new user on the platform by collecting essential details like fullname, email, and password, username, . Ensures data validation and securely stores user credentials.",
+        description: "Registers a new user on the platform by collecting essential details like fullname, email, and password, username. Ensures data validation and securely stores user credentials.",
         image: "/social_media/register.png",
         endpoint: "https://learnsphere-ln9j.onrender.com/api/v1/users/register",
-        input: `
-{
-  "fullName": "test_llive_2",
-  "email": "testliveapireal2@gmail.com",
-  "username": "testliveapireal2",
-  "password" : "12345678",
-  "avatar" : "https://demoImage.url",
-  "coverImage" : "https://demoImage.url",             
+        input: `{
+    "fullName": "test_llive_2",
+    "email": "testliveapireal2@gmail.com",
+    "username": "testliveapireal2",
+    "password": "12345678",
+    "avatar": "https://demoImage.url",
+    "coverImage": "https://demoImage.url"
 }`,
-        output:
-          `{
+        output: `{
     "statusCode": 200,
     "data": {
         "_id": "68b95b9e77a0e024719b2c5d",
@@ -877,59 +411,17 @@ export const apiGroups = [
     },
     "message": "User Register Successfully",
     "success": true
-}`,
-        codeSamples: {
-          node: `fetch("https://learnsphere-ln9j.onrender.com/api/v1/users/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-  "fullName": "test_llive_2",
-  "email": "testliveapireal2@gmail.com",
-  "username": "testliveapireal2",
-  "password" : "12345678",
-  "avatar" : "https://demoImage.url",
-  "coverImage" : "https://demoImage.url",             
-
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://learnsphere-ln9j.onrender.com/api/v1/users/register", {
-  "fullName": "test_llive_2",
-  "email": "testliveapireal2@gmail.com",
-  "username": "testliveapireal2",
-  "password" : "12345678",
-  "avatar" : "https://demoImage.url",
-  "coverImage" : "https://demoImage.url",             
-).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-  "fullName": "test_llive_2",
-  "email": "testliveapireal2@gmail.com",
-  "username": "testliveapireal2",
-  "password" : "12345678",
-  "avatar" : "https://demoImage.url",
-  "coverImage" : "https://demoImage.url",             
-
-          
-          response = requests.post("https://learnsphere-ln9j.onrender.com/api/v1/users/register", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
-        name: "login ",
+        name: "login",
         method: "POST",
         description: "Login with that user .",
         image: "/social_media/login.png",
         endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/login",
-        input: `        
-{
-    "username" : "testliveapireal3",
-    "password" : "12345678"
+        input: `{
+    "username": "testliveapireal3",
+    "password": "12345678"
 }`,
         output: `{
     "statusCode": 200,
@@ -946,98 +438,229 @@ export const apiGroups = [
             "updatedAt": "2025-09-04T09:52:40.222Z",
             "__v": 0
         },
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1NzA2NTk2MH0.S3f7Ogb13dA1msp14DUj61d1l_Z8alo3YTtU15G0UFI",
-        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1Nzg0MzU2MH0.qk7eQr-jtXgKoopeNmLg03_sVhc_1ahyFd_gxOfPapo"
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     },
     "message": "User logged In Successfully",
     "success": true
-}`,
-        codeSamples: {
-          node: `fetch("https://social-media-3cdj.onrender.com/api/v1/users/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-    "username" : "testliveapireal3",
-    "password" : "12345678"
-})
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://social-media-3cdj.onrender.com/api/v1/users/login", data).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-    "username" : "testliveapireal3",
-    "password" : "12345678"
-}
-          
-          response = requests.post("https://social-media-3cdj.onrender.com/api/v1/users/login", json=data)
-          print(response.json())`
-        }
+}`
       },
       {
-        name: "login ",
+        name: "logout",
         method: "POST",
-        description: "Login with that user .",
-        image: "/social_media/login.png",
-        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/login",
-        input: `        
-{
-    "username" : "testliveapireal3",
-    "password" : "12345678"
+        description: "Logout with that user .",
+        image: "/social_media/logout.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/logout",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {},
+    "message": "User logged Out",
+    "success": true
+}`
+      },
+      {
+        name: "Refresh_Access_Token",
+        method: "POST",
+        description: "Refresh Your Access Token when it about to expire",
+        image: "/social_media/refreshaccessToken.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/refresh-token",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.Token.ZhapSkbBztgBcqMEGCTrG72qn5CkHhX4uqQtSwcuUN8"
+    },
+    "message": "Access token refreshed ",
+    "success": true
+}`
+      },
+      {
+        name: "change_password",
+        method: "POST",
+        description: "Update your Password",
+        image: "/social_media/update_Password.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/change-password",
+        input: `{
+    "oldPassword" : "12345678",
+    "newPassword" : "123456789"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": {},
+    "message": "Passwrod Changed Successfully",
+    "success": true
+}`
+      },
+      {
+        name: "Current_User",
+        method: "GET",
+        description: "Get currect Authenticated User",
+        image: "/social_media/current_user.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/current-user",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "_id": "68b95b9e77a0e024719b2c5d",
+        "username": "testliveapireal3",
+        "email": "testliveapireal3@gmail.com",
+        "fullName": "test_llive_3",
+        "avatar": "http://res.cloudinary.com/ytsobhan/video/upload/v1756978077/knsboxjmf1bjbtmaobe0.mp4",
+        "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
+        "watchHistory": [],
+        "createdAt": "2025-09-04T09:27:58.780Z",
+        "updatedAt": "2025-10-23T03:53:44.625Z",
+        "__v": 0
+    },
+    "message": "User fetched successfully",
+    "success": true
+}`
+      },
+      {
+        name: "update_account",
+        method: "POST",
+        description: "Update Your Account Details",
+        image: "/social_media/update_account_details.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/update-account",
+        input: `{
+    "fullName" : "testliveapireal4",
+    "email" : "testliveapireal3@gmail.com"
 }`,
         output: `{
     "statusCode": 200,
     "data": {
-        "user": {
-            "_id": "68b95b9e77a0e024719b2c5d",
-            "username": "testliveapireal3",
-            "email": "testliveapireal3@gmail.com",
-            "fullName": "test_llive_3",
-            "avatar": "http://res.cloudinary.com/ytsobhan/video/upload/v1756978077/knsboxjmf1bjbtmaobe0.mp4",
-            "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
-            "watchHistory": [],
-            "createdAt": "2025-09-04T09:27:58.780Z",
-            "updatedAt": "2025-09-04T09:52:40.222Z",
-            "__v": 0
-        },
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1NzA2NTk2MH0.S3f7Ogb13dA1msp14DUj61d1l_Z8alo3YTtU15G0UFI",
-        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NTY5Nzk1NjAsImV4cCI6MTc1Nzg0MzU2MH0.qk7eQr-jtXgKoopeNmLg03_sVhc_1ahyFd_gxOfPapo"
+        "_id": "68b95b9e77a0e024719b2c5d",
+        "username": "testliveapireal3",
+        "email": "testliveapireal3@gmail.com",
+        "fullName": "testliveapireal4",
+        "avatar": "http://res.cloudinary.com/ytsobhan/video/upload/v1756978077/knsboxjmf1bjbtmaobe0.mp4",
+        "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
+        "watchHistory": [],
+        "createdAt": "2025-09-04T09:27:58.780Z",
+        "updatedAt": "2025-10-23T04:02:19.520Z",
+        "__v": 0,
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NjExOTEyNDYsImV4cCI6MTc2MjA1NTI0Nn0.dy22O5QKj3TBCbtKbK-8xt4KX8uvL8lezno-MoyGqX8"
     },
-    "message": "User logged In Successfully",
+    "message": "Account details updated successfully",
     "success": true
+}`
+      },
+      {
+        name: "update_Avatar",
+        method: "PATCH",
+        description: "Update Your Avtar Details",
+        image: "/social_media/update_avtar.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/update-avatar",
+        input: `{
+    avatar : "PROVIDE IMAGE URL"
 }`,
-        codeSamples: {
-          node: `fetch("https://social-media-3cdj.onrender.com/api/v1/users/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-    "username" : "testliveapireal3",
-    "password" : "12345678"
-})
-          })
-          .then(res => res.json())
-          .then(data => console.log(data));`,
-          axios: `axios.post("https://social-media-3cdj.onrender.com/api/v1/users/login", data).then(res => {
-            console.log(res.data);
-          });`,
-          python: `import requests
-          
-          data = {
-    "username" : "testliveapireal3",
-    "password" : "12345678"
-}
-          
-          response = requests.post("https://social-media-3cdj.onrender.com/api/v1/users/login", json=data)
-          print(response.json())`
-        }
-      }
-    ],
-  },
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "_id": "68b95b9e77a0e024719b2c5d",
+        "username": "testliveapireal3",
+        "email": "testliveapireal3@gmail.com",
+        "fullName": "testliveapireal4",
+        "avatar": "http://res.cloudinary.com/ytsobhan/image/upload/v1761192324/y25hln8qwugeekoklrdd.jpg",
+        "coverImage": "http://res.cloudinary.com/ytsobhan/image/upload/v1756978078/blqbbxvcxhchlri7r2rc.jpg",
+        "watchHistory": [],
+        "password": "$2b$10$dx1HZZPMW67kDSMsJtvPwOCkJXuhSOrNqflZMJ2MJLTNiNmHTFEvG",
+        "createdAt": "2025-09-04T09:27:58.780Z",
+        "updatedAt": "2025-10-23T04:05:25.717Z",
+        "__v": 0,
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NjExOTEyNDYsImV4cCI6MTc2MjA1NTI0Nn0.dy22O5QKj3TBCbtKbK-8xt4KX8uvL8lezno-MoyGqX8"
+    },
+    "message": "Avatar image updated successfully",
+    "success": true
+}`
+      },
+      {
+        name: "update_Cover_Image",
+        method: "PATCH",
+        description: "Update Your Cover Image Details",
+        image: "/social_media/update_cover.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/update-cover-image",
+        input: `{
+    avatar : "PROVIDE IMAGE URL"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "_id": "68b95b9e77a0e024719b2c5d",
+        "username": "testliveapireal3",
+        "email": "testliveapireal3@gmail.com",
+        "fullName": "testliveapireal4",
+        "avatar": "http://res.cloudinary.com/ytsobhan/image/upload/v1761192324/y25hln8qwugeekoklrdd.jpg",
+        "coverImage": "http://res.cloudinary.com/ytsobhan/video/upload/v1761192532/giuinnh8zbfnsax5we3c.mp4",
+        "watchHistory": [],
+        "password": "$2b$10$dx1HZZPMW67kDSMsJtvPwOCkJXuhSOrNqflZMJ2MJLTNiNmHTFEvG",
+        "createdAt": "2025-09-04T09:27:58.780Z",
+        "updatedAt": "2025-10-23T04:08:53.795Z",
+        "__v": 0,
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGI5NWI5ZTc3YTBlMDI0NzE5YjJjNWQiLCJlbWFpbCI6InRlc3RsaXZlYXBpcmVhbDNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0bGl2ZWFwaXJlYWwzIiwiZnVsbE5hbWUiOiJ0ZXN0X2xsaXZlXzMiLCJpYXQiOjE3NjExOTEyNDYsImV4cCI6MTc2MjA1NTI0Nn0.dy22O5QKj3TBCbtKbK-8xt4KX8uvL8lezno-MoyGqX8"
+    },
+    "message": "Cover Image is uploaded successfully",
+    "success": true
+}`
+      },
+      {
+        name: "User_Channel_Profile",
+        method: "GET",
+        description: "Get_User_Channel_Profile",
+        image: "/social_media/user_channel_profile.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/c/{{username}}",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "_id": "68b95b9e77a0e024719b2c5d",
+        "username": "testliveapireal3",
+        "email": "testliveapireal3@gmail.com",
+        "avatar": "http://res.cloudinary.com/ytsobhan/image/upload/v1761192324/y25hln8qwugeekoklrdd.jpg",
+        "coverImage": "http://res.cloudinary.com/ytsobhan/video/upload/v1761192532/giuinnh8zbfnsax5we3c.mp4",
+        "subscribersCount": 0,
+        "channelsSubscribeToCount": 0,
+        "isSubscribed": false
+    },
+    "message": "user channel is fetched successfully",
+    "success": true
+}`
+      },
+      {
+        name: "Watch_History",
+        method: "GET",
+        description: "Get users Watch History",
+        image: "/social_media/get_Watch_History.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/history",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": [],
+    "message": "Watch history fetched successfully",
+    "success": true
+}`
+      },
+      {
+        name: "Watch_History",
+        method: "GET",
+        description: "Get users Watch History",
+        image: "/social_media/get_Watch_History.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/history",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": [],
+    "message": "Watch history fetched successfully",
+    "success": true
+}`
+      },
+    ]
+  }
 ];
+
+apiGroups.forEach(group => {
+  group.apis.forEach(api => {
+    api.codeSamples = generateCodeSamples(api.method, api.endpoint, api.input);
+  });
+});
