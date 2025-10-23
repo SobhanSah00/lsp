@@ -29,7 +29,7 @@ router.route("/upload-video").post(
 );
 
 router.route("/d/:videoId").delete(verifyJwt, deleteVideoAndThumbnail);
-router.route("/public-video/:videoId").patch(verifyJwt,togglePublishStatus)
+router.route("/toggle/publish/:videoId").patch(verifyJwt,togglePublishStatus)
 router.route("/update-video-fields/:videoId").patch(verifyJwt,updateVideoFields)
 router.route("/update-video-thumbnail/:videoId").patch(verifyJwt,upload.single("thumbnail"),updateVideoThumbnail)
 router.route("/getVideoById/:videoId").get(verifyJwt,getVideoById)

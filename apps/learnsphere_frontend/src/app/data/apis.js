@@ -642,16 +642,42 @@ export const apiGroups = [
 }`
       },
       {
-        name: "Watch_History",
-        method: "GET",
-        description: "Get users Watch History",
-        image: "/social_media/get_Watch_History.png",
-        endpoint: "https://social-media-3cdj.onrender.com/api/v1/users/history",
-        input: `NOT REQUIRED`,
+        name: "Publish_Video",
+        method: "POST",
+        description: "Publish a video to the platfrom",
+        image: "/social_media/publish_video.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/upload-video",
+        input: `{
+          "title" : "live test content api",
+          "description" : "this is live test of apis",
+          "videoFile" : "give a video file url",
+          "thumbnail" : "give a thumbnail file url"
+}`,
         output: `{
     "statusCode": 200,
-    "data": [],
-    "message": "Watch history fetched successfully",
+    "data": {
+        "videoFile": {
+            "url": "http://res.cloudinary.com/ytsobhan/video/upload/v1761196157/cyfwggh7ugbu9nhntvuw.mp4",
+            "public_id": "cyfwggh7ugbu9nhntvuw",
+            "_id": "68f9b87f2000396fe6d467c9"
+        },
+        "thumbnail": {
+            "url": "http://res.cloudinary.com/ytsobhan/image/upload/v1761196158/kdocmmrjtnhve5y2ryws.png",
+            "public_id": "kdocmmrjtnhve5y2ryws",
+            "_id": "68f9b87f2000396fe6d467ca"
+        },
+        "title": "live test content api",
+        "description": "this is live test of apis",
+        "duration": 5.667,
+        "views": 0,
+        "isPublished": false,
+        "owner": "68b95b9e77a0e024719b2c5d",
+        "_id": "68f9b87f2000396fe6d467c8",
+        "createdAt": "2025-10-23T05:09:19.384Z",
+        "updatedAt": "2025-10-23T05:09:19.384Z",
+        "__v": 0
+    },
+    "message": "video uploaded successfully",
     "success": true
 }`
       },
