@@ -1,7 +1,7 @@
 const generateCodeSamples = (method, endpoint, input) => {
   const hasBody = method === 'POST' || method === 'PATCH' || method === 'PUT';
   const inputData = input && input !== 'NOT REQUIRED' && !input.includes('GET REQUEST') ? input : null;
-  
+
   return {
     node: hasBody && inputData
       ? `fetch("${endpoint}", {
@@ -18,7 +18,7 @@ const generateCodeSamples = (method, endpoint, input) => {
 })
 .then(res => res.json())
 .then(data => console.log(data));`,
-    
+
     axios: hasBody && inputData
       ? `axios.${method.toLowerCase()}("${endpoint}", ${inputData})
 .then(res => {
@@ -28,7 +28,7 @@ const generateCodeSamples = (method, endpoint, input) => {
 .then(res => {
   console.log(res.data);
 });`,
-    
+
     python: hasBody && inputData
       ? `import requests
 
@@ -678,6 +678,156 @@ export const apiGroups = [
         "__v": 0
     },
     "message": "video uploaded successfully",
+    "success": true
+}`
+      },
+      {
+        name: "toggle_video",
+        method: "PATCH",
+        description: "Publish a video to the platfrom",
+        image: "/social_media/toogle_video.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/toggle/publish/{{Video_Id}}",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "isPublished": true
+    },
+    "message": "video status updated successfully",
+    "success": true
+}`
+      },
+      {
+        name: "Update_Video_Fields",
+        method: "PATCH",
+        description: "Update the title or description of the video content",
+        image: "/social_media/update_video_fields.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/update-video-fields/{{Video_Id}}",
+        input: `{
+    "title" : "new live url test title",
+    "description" : "new live url test description"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": "video field are updated successfully",
+    "message": "Success",
+    "success": true
+}`
+      },
+      {
+        name: "Update_Video_Thumbnail",
+        method: "PATCH",
+        description: "Update the thumbnail of video content",
+        image: "/social_media/update_video_thumbnail.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/update-video-thumbnail/{{Video_Id}}",
+        input: `{
+      "thumbnail" : "Put a Thumbnail Url"
+}`,
+        output: `{
+    "statusCode": 200,
+    "data": "video thumbnail are updated successfully",
+    "message": "Success",
+    "success": true
+}`
+      },
+      {
+        name: "Get_video_By_Id",
+        method: "GET",
+        description: "Get The Video by their Id",
+        image: "/social_media/Get_Video_By_Id.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/getVideoById/{{Video_Id}}",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {
+        "_id": "68f9b87f2000396fe6d467c8",
+        "videoFile": {
+            "url": "http://res.cloudinary.com/ytsobhan/video/upload/v1761196157/cyfwggh7ugbu9nhntvuw.mp4"
+        },
+        "title": "new live url test title",
+        "description": "new live url test description",
+        "duration": 5.667,
+        "views": 0,
+        "owner": {
+            "_id": "68b95b9e77a0e024719b2c5d",
+            "username": "testliveapireal3",
+            "avatar": "http://res.cloudinary.com/ytsobhan/image/upload/v1761192324/y25hln8qwugeekoklrdd.jpg",
+            "subscribersCount": 0,
+            "isSubscribed": false
+        },
+        "createdAt": "2025-10-23T05:09:19.384Z",
+        "comments": [],
+        "likesCount": 0,
+        "isLiked": false
+    },
+    "message": "Video details fetched successfully",
+    "success": true
+}`
+      },
+      {
+        name: "All_video_By_User",
+        method: "GET",
+        description: "Get the all video of user has published .",
+        image: "/social_media/Get_All_video_Of_publised_By_user.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/getVideoById/{{Video_Id}}",
+        input: `NOT REQUIRED`,
+        output: `{{
+    "statusCode": 200,
+    "data": {
+        "docs": [
+            {
+                "_id": "68f9b87f2000396fe6d467c8",
+                "videoFile": {
+                    "url": "http://res.cloudinary.com/ytsobhan/video/upload/v1761196157/cyfwggh7ugbu9nhntvuw.mp4",
+                    "public_id": "cyfwggh7ugbu9nhntvuw",
+                    "_id": "68f9b87f2000396fe6d467c9"
+                },
+                "thumbnail": {
+                    "url": "http://res.cloudinary.com/ytsobhan/image/upload/v1761202801/lmenjmyn9qpiqwve4zll.png",
+                    "public_id": "lmenjmyn9qpiqwve4zll",
+                    "_id": "68f9d272983d0c9603d69352"
+                },
+                "title": "new live url test title",
+                "description": "new live url test description",
+                "duration": 5.667,
+                "views": 1,
+                "isPublished": true,
+                "owner": "68b95b9e77a0e024719b2c5d",
+                "createdAt": "2025-10-23T05:09:19.384Z",
+                "updatedAt": "2025-10-23T07:04:22.726Z",
+                "__v": 0,
+                "ownerDetails": {
+                    "_id": "68b95b9e77a0e024719b2c5d",
+                    "username": "testliveapireal3",
+                    "avatar": "http://res.cloudinary.com/ytsobhan/image/upload/v1761192324/y25hln8qwugeekoklrdd.jpg"
+                }
+            }
+        ],
+        "totalDocs": 1,
+        "limit": 10,
+        "page": 1,
+        "totalPages": 1,
+        "pagingCounter": 1,
+        "hasPrevPage": false,
+        "hasNextPage": false,
+        "prevPage": null,
+        "nextPage": null
+    },
+    "message": "videos fetched successfully",
+    "success": true
+}`
+      },
+      {
+        name: "delete_the_video",
+        method: "DELETE",
+        description: "Delete the video by there Id",
+        image: "/social_media/delete_the_video.png",
+        endpoint: "https://social-media-3cdj.onrender.com/api/v1/video/d/{{Video_Id}}",
+        input: `NOT REQUIRED`,
+        output: `{
+    "statusCode": 200,
+    "data": {},
+    "message": "video delted successfully",
     "success": true
 }`
       },

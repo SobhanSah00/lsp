@@ -142,10 +142,10 @@ export default function Sidebar() {
                 </svg>
               </button>
               
-              <div className={`transition-all duration-300 overflow-hidden ${
+              <div className={`transition-all duration-300 ${
                 expandedGroups[group.title] 
-                  ? 'max-h-screen opacity-100' 
-                  : 'max-h-0 opacity-0'
+                  ? 'opacity-100' 
+                  : 'max-h-0 opacity-0 overflow-hidden'
               }`}>
                 <div className="ml-6 mt-2 space-y-1">
                   {group.apis.map((api) => {
