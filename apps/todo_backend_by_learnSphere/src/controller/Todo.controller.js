@@ -225,6 +225,7 @@ const getTodoStats = asyncHandler(async (req, res) => {
     ])
 
     console.log(stats);
+    
 
     const data = {
         total: stats[0].total[0]?.count || 0,
